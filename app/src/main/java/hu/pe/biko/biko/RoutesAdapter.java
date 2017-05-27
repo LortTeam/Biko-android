@@ -1,5 +1,7 @@
 package hu.pe.biko.biko;
 
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-
-/**
- * Created by nikita on 27.05.17.
- */
 
 public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHolder> {
 
@@ -28,6 +26,10 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final RoutesAdapter.MyViewHolder holder, int position) {
         Route route = routeList.get(position);
+        holder.name.setText(route.getName());
+        holder.description.setText(route.getDescription());
+    //    holder.image.setImageBitmap(BitmapFactory.decodeResource(holder.view.getResources()
+     //           , R.drawable.));
     }
 
     @Override
@@ -46,6 +48,6 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHold
             description = (TextView) itemView.findViewById(R.id.shortdescription_card_routes);
             image = (ImageView) itemView.findViewById(R.id.img_card_main);
         }
-
     }
+
 }
