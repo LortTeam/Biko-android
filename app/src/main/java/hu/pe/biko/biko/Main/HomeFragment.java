@@ -40,6 +40,8 @@ public class HomeFragment extends Fragment {
         biko.getRoutes().observeOn(AndroidSchedulers.mainThread())
                 .subscribe(routes -> recyclerView.setAdapter(new RoutesAdapter(routes)),
                         Throwable::printStackTrace);
+
+
         return view;
     }
 
