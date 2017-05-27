@@ -19,12 +19,12 @@ public class Biko {
             .build().create(BikoApi.class);
 
     @GET("routes")
-    Flowable<List<Route>> getRoutes() {
+    public Flowable<List<Route>> getRoutes() {
         return bikoApi.getRoutes().subscribeOn(Schedulers.io());
     }
 
     @GET("places")
-    Flowable<List<Place>> getPlaces() {
+    public Flowable<List<Place>> getPlaces() {
         return bikoApi.getPlaces().subscribeOn(Schedulers.io());
     }
 }
