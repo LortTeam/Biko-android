@@ -11,13 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import hu.pe.biko.biko.R;
+import hu.pe.biko.biko.Route;
+import hu.pe.biko.biko.RoutesAdapter;
 
 
 public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
-
+    ArrayList<Route> routesList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -33,6 +37,12 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        routesList = new ArrayList<Route>();
+        for (int i = 0; i < 5; i++) {
+            routesList.add(0, new Route("Route", "Lorem ipsum", "Kaliningrad", "Russia", "Kaliningrad obl.", 2, "1 hour"));
+        }
+        RoutesAdapter adapter = new RoutesAdapter(routesList);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
