@@ -72,5 +72,7 @@ data class Route(var name: String, var description: String, var image: String,
         dest.writeString(time)
     }
 }
+data class Route(var name: String, var description: String,
+                 var city: String, var country: String, var state: String, var distance: Int, var time: String)
 
 
