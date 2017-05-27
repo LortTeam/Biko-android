@@ -1,7 +1,5 @@
 package hu.pe.biko.biko.Main;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +11,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import hu.pe.biko.biko.Place;
 import hu.pe.biko.biko.R;
 import hu.pe.biko.biko.Route;
 import hu.pe.biko.biko.RoutesAdapter;
@@ -37,9 +36,10 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        routesList = new ArrayList<Route>();
+        routesList = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            routesList.add(0, new Route("Route", "Lorem ipsum", "Kaliningrad", "Russia", "Kaliningrad obl.", 2, "1 hour"));
+            routesList.add(0, new Route("Route", "Descrption", "image", "Kaliningrad", "Russia", "State",
+                    0, "", new ArrayList<Place>()));
         }
         RoutesAdapter adapter = new RoutesAdapter(routesList);
         recyclerView.setAdapter(adapter);

@@ -1,14 +1,24 @@
 package hu.pe.biko.biko;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+
+import io.reactivex.Flowable;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -43,5 +53,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        Intent intent = getIntent();
+        Flowable.just(intent.getParcelableExtra("route"))
+                .map(null);
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.BIKING)
+                .withListener(new RoutingListener() {
+                    @Override
+                    public void onRoutingFailure(RouteException e) {
+
+                    }
+
+                    @Override
+                    public void onRoutingStart() {
+
+                    }
+
+                    @Override
+                    public void onRoutingSuccess(ArrayList<Route> arrayList, int i) {
+
+                    }
+
+                    @Override
+                    public void onRoutingCancelled() {
+
+                    }
+                })
+                .waypoints()
+                .key("")
+                .build();
+        routing.execute();
     }
 }

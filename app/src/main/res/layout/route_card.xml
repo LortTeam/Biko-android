@@ -19,7 +19,6 @@
             android:cropToPadding="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/caption"
             android:id="@+id/img_card_main"/>
 
         <TextView

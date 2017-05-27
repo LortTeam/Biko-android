@@ -1,13 +1,13 @@
 package hu.pe.biko.biko;
 
-import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -28,8 +28,11 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHold
         Route route = routeList.get(position);
         holder.name.setText(route.getName());
         holder.description.setText(route.getDescription());
-    //    holder.image.setImageBitmap(BitmapFactory.decodeResource(holder.view.getResources()
-     //           , R.drawable.));
+        Glide.with(holder.view.getContext())
+                .load(route.getImage())
+                .error(R.drawable.caption)
+                .placeholder(R.drawable.caption)
+                .into(holder.image);
     }
 
     @Override

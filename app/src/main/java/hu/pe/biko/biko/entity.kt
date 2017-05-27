@@ -40,7 +40,7 @@ data class Place(var name: String, var description: String, var address: String,
 
 data class Route(var name: String, var description: String, var image: String,
                  var city: String, var country: String, var state:
-                 String, var distance: Int, var time: String) : Parcelable {
+                 String, var distance: Int, var time: String, var places: List<Place>) : Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<Route> = object : Parcelable.Creator<Route> {
             override fun createFromParcel(source: Parcel): Route = Route(source)
@@ -49,14 +49,15 @@ data class Route(var name: String, var description: String, var image: String,
     }
 
     constructor(source: Parcel) : this(
-            source.readString(),
-            source.readString(),
-            source.readString(),
-            source.readString(),
-            source.readString(),
-            source.readString(),
-            source.readInt(),
-            source.readString()
+    source.readString(),
+    source.readString(),
+    source.readString(),
+    source.readString(),
+    source.readString(),
+    source.readString(),
+    source.readInt(),
+    source.readString(),
+    source.createTypedArrayList(Place.CREATOR)
     )
 
     override fun describeContents() = 0
@@ -70,7 +71,6 @@ data class Route(var name: String, var description: String, var image: String,
         dest.writeString(state)
         dest.writeInt(distance)
         dest.writeString(time)
+        dest.writeTypedList(places)
     }
 }
-
-
