@@ -3,45 +3,53 @@ package hu.pe.biko.biko.Main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import hu.pe.biko.biko.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
+        final Fragment fragment1 = new HomeFragment();
+        final Fragment fragment2 = new WorldFragment();
+        final Fragment fragment3 = new AccountFragment();
 
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
+        fragmentTransaction1.replace(R.id.container_main, fragment1).commit();
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.navigation_home:
+                                FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
+                                fragmentTransaction1.replace(R.id.container_main, fragment1).commit();
+                                return true;
+                            case R.id.navigation_world:
+                                FragmentTransaction fragmentTransaction2 = fragmentManager.beginTransaction();
+                                fragmentTransaction2.replace(R.id.container_main, fragment2).commit();
+                                return true;
+                            case R.id.navigation_account:
+                                FragmentTransaction fragmentTransaction3 = fragmentManager.beginTransaction();
+                                fragmentTransaction3.replace(R.id.container_main, fragment3).commit();
+                                return true;
+                        }
+                        return true;
+                    }
+
+                });
+    }
 }
+
+
