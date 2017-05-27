@@ -18,8 +18,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-import io.reactivex.Flowable;
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -74,10 +72,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onRoutingSuccess(ArrayList<Route> routes, int i) {
                         mMap.addPolyline(routes.get(0).getPolyOptions());
-                        Flowable.fromIterable(route.getPlaces())
+                      /*  Flowable.fromIterable(route.getPlaces())
                                 .map(place -> new LatLng(place.getLat(), place.getLng()))
                                 .reduce(new MarkerOptions(), MarkerOptions::position)
-                        .subscribe();
+                        .subscribe();*/
                     }
 
                     @Override
