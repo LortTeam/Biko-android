@@ -55,8 +55,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         Intent intent = getIntent();
-        Flowable.just(intent.getParcelableExtra("route"))
-                .map(null);
+        hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
+        Flowable.fromIterable(route.getPlaces())
+                .map(place -> new LatLng(place.getLat(), place.getLng()));
+
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.BIKING)
                 .withListener(new RoutingListener() {
