@@ -38,10 +38,12 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         routesList = new ArrayList<>();
-        Biko biko = new Biko();
-        biko.getRoutes().observeOn(AndroidSchedulers.mainThread())
-                .subscribe(routes -> recyclerView.setAdapter(new RoutesAdapter(routes)),
-                        Throwable::printStackTrace);
+        for (int i = 0; i < 5; i++) {
+            routesList.add(0, new Route("Route", "Descrption", "image", "Kaliningrad", "Russia", "State",
+                    0, "", new ArrayList<Place>()));
+        }
+        RoutesAdapter adapter = new RoutesAdapter(routesList);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
