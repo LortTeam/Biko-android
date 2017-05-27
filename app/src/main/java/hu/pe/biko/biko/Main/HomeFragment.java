@@ -11,10 +11,11 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import hu.pe.biko.biko.Place;
+import hu.pe.biko.biko.Biko;
 import hu.pe.biko.biko.R;
 import hu.pe.biko.biko.Route;
 import hu.pe.biko.biko.RoutesAdapter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
 public class HomeFragment extends Fragment {
@@ -31,18 +32,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        // Inflate the layout for this fragment
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        routesList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            routesList.add(0, new Route("Route", "Descrption", "image", "Kaliningrad", "Russia", "State",
-                    0, "", new ArrayList<Place>()));
-        }
-        RoutesAdapter adapter = new RoutesAdapter(routesList);
-        recyclerView.setAdapter(adapter);
+        Biko biko = new Biko();
+        biko.getRoutes().observeOn(AndroidSchedulers.mainThread())
+                .subscribe(routes -> recyclerView.setAdapter(new RoutesAdapter(routes)),
+                        Throwable::printStackTrace);
         return view;
     }
 
