@@ -33,16 +33,6 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_acc);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        routesList = new ArrayList<Route>();
-        for (int i = 0; i < 5; i++) {
-            routesList.add(0, new Route("Route", "Lorem ipsum", "Kaliningrad", "Russia", "Kaliningrad obl.", 2, "1 hour"));
-        }
-        RoutesCompletedAdapter adapter = new RoutesCompletedAdapter(routesList);
-        recyclerView.setAdapter(adapter);
         return view;
     }
 
