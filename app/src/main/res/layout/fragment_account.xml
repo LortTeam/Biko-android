@@ -1,13 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="hu.pe.biko.biko.Main.AccountFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--<include layout="@layout/info_user_card" />-->
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello AccountFragment" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/rv_acc">
 
-</FrameLayout>
+        <include layout="@layout/info_user_card"/>
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

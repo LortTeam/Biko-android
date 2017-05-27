@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         routesList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++) {
             routesList.add(0, new Route("Route", "Descrption", "image", "Kaliningrad", "Russia", "State",
                     0, "", new ArrayList<Place>()));
         }
