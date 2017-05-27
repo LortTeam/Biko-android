@@ -1,4 +1,4 @@
-package hu.pe.biko.biko;
+package hu.pe.biko.biko.Main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -6,6 +6,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import hu.pe.biko.biko.R;
 
 public class MainActivity extends AppCompatActivity {
 
