@@ -13,7 +13,7 @@ import retrofit2.http.GET;
 
 public class Biko {
     private BikoApi bikoApi = new Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("https://bikotest.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build().create(BikoApi.class);

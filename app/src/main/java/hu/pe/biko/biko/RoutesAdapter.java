@@ -35,15 +35,12 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHold
                 .error(R.drawable.caption)
                 .placeholder(R.drawable.caption)
                 .into(holder.image);
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(holder.view.getContext(), RouteActivity.class);
-                intent.putExtra("name", holder.name.getText().toString());
-                intent.putExtra("description", holder.description.getText().toString());
-                // Image ???
-                holder.view.getContext().startActivity(intent);
-            }
+        holder.view.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.view.getContext(), RouteActivity.class);
+            intent.putExtra("name", holder.name.getText().toString());
+            intent.putExtra("description", holder.description.getText().toString());
+            // Image ???
+            holder.view.getContext().startActivity(intent);
         });
     }
 
