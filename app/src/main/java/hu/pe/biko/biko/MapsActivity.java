@@ -56,8 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent intent = getIntent();
         hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
-        Flowable.fromIterable(route.getPlaces())
-                .map(place -> new LatLng(place.getLat(), place.getLng()));
+
 
         Routing routing = new Routing.Builder()
                 .travelMode(AbstractRouting.TravelMode.BIKING)
@@ -73,8 +72,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
                     @Override
-                    public void onRoutingSuccess(ArrayList<Route> arrayList, int i) {
-
+                    public void onRoutingSuccess(ArrayList<Route> routes, int i) {
+                        mMap.addPolyline(routes.get(0).getPolyOptions());
+                        Flowable.fromIterable(route.getPlaces())
+                                .map(place -> new LatLng(place.getLat(), place.getLng()))
+                                .reduce(new MarkerOptions(), MarkerOptions::position)
+                        .subscribe();
                     }
 
                     @Override
