@@ -15,6 +15,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Intent intent = getIntent();
-        hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
+        Gson gson = new GsonBuilder().create();
+        String string = getIntent().getStringExtra("route");
+        hu.pe.biko.biko.Route route = gson.fromJson(string, hu.pe.biko.biko.Route.class);
         Flowable.fromIterable(route.getPlaces())
                 .map(place -> {
                     LatLng latLng = new LatLng(place.getLat(), place.getLng());
