@@ -49,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .title(place.getName()).snippet(place.getDescription()));
                     return latLng;
                 }).toList().subscribe(latLngs -> new Routing.Builder()
-                .key("AIzaSyDNOZJGI2nNtqmqiHdsvqcQMYF_6VBdi38 ")
+                .key("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
                 .waypoints(latLngs)
                 .travelMode(AbstractRouting.TravelMode.BIKING)
                 .withListener(new RoutingListener() {
