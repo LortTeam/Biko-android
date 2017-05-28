@@ -71,6 +71,9 @@ dependencies {
 
     compile 'com.akexorcist:googledirectionlibrary:1.0.5'
 
+    compile 'com.google.android.gms:play-services-identity:10.2.6'
+    compile 'com.google.android.gms:play-services-location:10.2.6'
+
 }
 repositories {
     mavenCentral()
