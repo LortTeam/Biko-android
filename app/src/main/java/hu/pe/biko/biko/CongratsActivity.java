@@ -20,6 +20,7 @@ import com.vk.sdk.dialogs.VKShareDialogBuilder;
 import io.reactivex.Maybe;
 import io.reactivex.MaybeEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class CongratsActivity extends AppCompatActivity {
     Route route;
@@ -48,7 +49,7 @@ public class CongratsActivity extends AppCompatActivity {
                                 .get()))
                         .map(bitmap -> new VKUploadImage[]{
                                 new VKUploadImage(bitmap, VKImageParameters.pngImage())})
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(vkUploadImages -> new VKShareDialogBuilder()
                                 .setText("I just finished the route " + route.getName() + "!")
