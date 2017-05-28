@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -39,8 +37,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHold
                 .into(holder.image);
         holder.view.setOnClickListener(v -> {
             Intent intent = new Intent(holder.view.getContext(), RouteActivity.class);
-            Gson gson = new GsonBuilder().create();
-            intent.putExtra("route", gson.toJson(route));
+            intent.putExtra("route", route);
             holder.view.getContext().startActivity(intent);
         });
     }

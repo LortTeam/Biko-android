@@ -1,15 +1,10 @@
 package hu.pe.biko.biko;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
@@ -22,12 +17,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
-import hu.pe.biko.biko.Main.MainActivity;
 import io.reactivex.Flowable;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -49,9 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Intent intent = getIntent();
-        Gson gson = new GsonBuilder().create();
-        String string = getIntent().getStringExtra("route");
-        hu.pe.biko.biko.Route route = gson.fromJson(string, hu.pe.biko.biko.Route.class);
+        hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
         Flowable.fromIterable(route.getPlaces())
                 .map(place -> {
                     LatLng latLng = new LatLng(place.getLat(), place.getLng());
