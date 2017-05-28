@@ -7,6 +7,15 @@
 
     <!--<include layout="@layout/info_user_card" />-->
 
-    <include layout="@layout/info_user_card"/>
+    <include layout="@layout/info_user_card"
+        android:id="@+id/include" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rv_acc"
+        android:layout_below="@+id/include"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

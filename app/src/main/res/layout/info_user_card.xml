@@ -9,8 +9,8 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
-        app:srcCompat="@drawable/blagovestnuy"
-        android:padding="24dp"
+        app:srcCompat="@drawable/blagovestny"
+        android:scaleType="centerCrop"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
@@ -19,11 +19,12 @@
         android:id="@+id/textView"
         android:layout_width="334dp"
         android:layout_height="wrap_content"
-        android:text="Ivan Blagovestnuy"
+        android:text="Ivan Blagovestny"
         android:gravity="center"
         android:textSize="36sp"
-        android:paddingBottom="6dp"
-        android:layout_below="@+id/imageView"
+        android:textColor="#FFFFFFFF"
+        android:paddingBottom="16dp"
+        android:layout_alignBottom="@+id/imageView"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
@@ -31,6 +32,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/stats"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:background="#eaeaea"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:gravity="center">
