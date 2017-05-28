@@ -1,6 +1,7 @@
 package hu.pe.biko.biko;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +16,11 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.photo.VKImageParameters;
 import com.vk.sdk.api.photo.VKUploadImage;
 import com.vk.sdk.dialogs.VKShareDialogBuilder;
+
+import io.reactivex.Maybe;
+import io.reactivex.MaybeEmitter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class CongratsActivity extends AppCompatActivity {
     Route route;
@@ -35,37 +41,37 @@ public class CongratsActivity extends AppCompatActivity {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                try {
-                    new VKShareDialogBuilder()
-                            .setText("I just finished the route " + route.getName() + "!")
-                            .setAttachmentImages(new VKUploadImage[]{
-                                    new VKUploadImage(Glide.with(CongratsActivity.this)
-                                            .load(route.getImage())
-                                            .asBitmap()
-                                            .into(-1, -1)
-                                            .get(), VKImageParameters.pngImage())})
-                            .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
-                                @Override
-                                public void onVkShareComplete(int postId) {
-                                    Log.i("tag", "onVkShareComplete");
-                                    finish();
-                                }
+                Maybe.create((MaybeEmitter<Bitmap> onSubscribe) -> onSubscribe.onSuccess(
+                        Glide.with(CongratsActivity.this)
+                                .load(route.getImage())
+                                .asBitmap()
+                                .into(-1, -1)
+                                .get())).observeOn(Schedulers.io())
+                        .map(bitmap -> new VKUploadImage[]{
+                                new VKUploadImage(bitmap, VKImageParameters.pngImage())})
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(vkUploadImages -> new VKShareDialogBuilder()
+                                .setText("I just finished the route " + route.getName() + "!")
+                                .setAttachmentImages(vkUploadImages)
+                                .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
+                                    @Override
+                                    public void onVkShareComplete(int postId) {
+                                        Log.i("tag", "onVkShareComplete");
+                                        finish();
+                                    }
 
-                                @Override
-                                public void onVkShareCancel() {
-                                    Log.i("tag", "onVkShareCancel");
-                                    finish();
-                                }
+                                    @Override
+                                    public void onVkShareCancel() {
+                                        Log.i("tag", "onVkShareCancel");
+                                        finish();
+                                    }
 
-                                @Override
-                                public void onVkShareError(VKError error) {
-                                    Log.i("tag", "onVkShareError");
-                                    finish();
-                                }
-                            });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                                    @Override
+                                    public void onVkShareError(VKError error) {
+                                        Log.i("tag", "onVkShareError");
+                                        finish();
+                                    }
+                                }));
             }
 
             @Override
