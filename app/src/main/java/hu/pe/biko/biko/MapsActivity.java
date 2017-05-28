@@ -1,11 +1,10 @@
 package hu.pe.biko.biko;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-import hu.pe.biko.biko.Main.MainActivity;
 import io.reactivex.Flowable;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
