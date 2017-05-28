@@ -8,19 +8,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import io.reactivex.Flowable;
 
@@ -43,42 +42,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Intent intent = getIntent();
-        hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
+        Route route = intent.getParcelableExtra("route");
         Flowable.fromIterable(route.getPlaces()).map(place -> {
             LatLng latLng = new LatLng(place.getLat(), place.getLng());
             mMap.addMarker(new MarkerOptions().position(latLng)
                     .title(place.getName()).snippet(place.getDescription()));
             return latLng;
-        }).toList().subscribe(latLngs -> new Routing.Builder()
-                .key("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
-                .waypoints(latLngs)
-                .travelMode(AbstractRouting.TravelMode.BIKING)
-                .alternativeRoutes(true)
-                .withListener(new RoutingListener() {
+        }).toList().subscribe(latLngs -> GoogleDirection.withServerKey("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
+                .from(latLngs.get(0))
+                .to(latLngs.get(latLngs.size() - 1))
+                .waypoints(latLngs.subList(1, latLngs.size() - 1))
+                .transportMode(TransportMode.WALKING)
+                .execute(new DirectionCallback() {
                     @Override
-                    public void onRoutingFailure(RouteException e) {
-                        Log.i("tag", "onRoutingFailure");
-                        e.printStackTrace();
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                        if (direction.isOK()) {
+                            com.akexorcist.googledirection.model.Route route = direction.getRouteList().get(0);
+                            mMap.addPolyline(new PolylineOptions().addAll(route.getOverviewPolyline().getPointList()));
+                            LatLngBounds bounds = new LatLngBounds(
+                                    route.getBound().getSouthwestCoordination().getCoordination(),
+                                    route.getBound().getNortheastCoordination().getCoordination());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+                        } else {
+                            Log.i("tag", direction.getStatus());
+                        }
                     }
 
                     @Override
-                    public void onRoutingStart() {
-                        Log.i("tag", "onRoutingStart");
+                    public void onDirectionFailure(Throwable t) {
+                        t.printStackTrace();
                     }
-
-                    @Override
-                    public void onRoutingSuccess(ArrayList<Route> routes, int i) {
-                        Log.i("tag", "onRoutingSuccess");
-                        mMap.addPolyline(routes.get(0).getPolyOptions());
-                        mMap.moveCamera(CameraUpdateFactory
-                                .newLatLngBounds(routes.get(0).getLatLgnBounds(), 10));
-                    }
-
-                    @Override
-                    public void onRoutingCancelled() {
-                        Log.i("tag", "onRoutingCancelled");
-                    }
-                }).build().execute());
+                }));
     }
 
     @Override
@@ -106,7 +100,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .setPositiveButton("Share", (dialog, which) -> {
                         //Sharing
                     });
-                            AlertDialog alert = builder.create();
+            AlertDialog alert = builder.create();
             alert.show();
             return true;
         }
