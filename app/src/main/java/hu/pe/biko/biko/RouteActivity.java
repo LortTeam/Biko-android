@@ -3,10 +3,12 @@ package hu.pe.biko.biko;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 public class RouteActivity extends AppCompatActivity {
     Route route;
@@ -32,5 +34,9 @@ public class RouteActivity extends AppCompatActivity {
             intent.putExtra("route", route);
             startActivity(intent);
         });
+        Glide.with(this).load(route.getImage())
+                .error(R.drawable.caption)
+                .placeholder(R.drawable.caption)
+                .into((ImageView) findViewById(R.id.image_route));
     }
 }

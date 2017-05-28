@@ -1,31 +1,45 @@
 package hu.pe.biko.biko;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.directions.route.AbstractRouting;
-import com.directions.route.Route;
-import com.directions.route.RouteException;
-import com.directions.route.Routing;
-import com.directions.route.RoutingListener;
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import io.reactivex.Flowable;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
+    GoogleApiClient client;
+    LocationRequest request;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +50,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        client = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        request = LocationRequest.create().setNumUpdates(1)
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Intent intent = getIntent();
-        hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
+        Route route = intent.getParcelableExtra("route");
         Flowable.fromIterable(route.getPlaces()).map(place -> {
             LatLng latLng = new LatLng(place.getLat(), place.getLng());
             mMap.addMarker(new MarkerOptions().position(latLng)
@@ -60,23 +82,49 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
 
                     @Override
-                    public void onRoutingStart() {
-                        Log.i("tag", "onRoutingStart");
+                    public void onDirectionFailure(Throwable t) {
+                        t.printStackTrace();
                     }
+                }));
+    }
 
-                    @Override
-                    public void onRoutingSuccess(ArrayList<Route> routes, int i) {
-                        Log.i("tag", "onRoutingSuccess");
-                        mMap.addPolyline(routes.get(0).getPolyOptions());
-                        mMap.moveCamera(CameraUpdateFactory
-                                .newLatLngBounds(routes.get(0).getLatLgnBounds(), 10));
-                    }
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i("tag", "onConnected");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(client, request, location -> {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addCircle(new CircleOptions().center(latLng).fillColor(Color.CYAN).radius(32.));
+        });
+    }
 
-                    @Override
-                    public void onRoutingCancelled() {
-                        Log.i("tag", "onRoutingCancelled");
-                    }
-                }).build().execute());
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i("tag", "onConnectionSuspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i("tag", "onConnectionFailed");
+    }
+
+    protected void onStart() {
+        client.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+
+        client.disconnect();
+        super.onStop();
     }
 
     @Override
@@ -85,7 +133,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    //TODO LOL
+    //TODO
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
