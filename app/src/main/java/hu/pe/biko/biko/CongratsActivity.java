@@ -71,7 +71,7 @@ public class CongratsActivity extends AppCompatActivity {
                                         Log.i("tag", "onVkShareError");
                                         finish();
                                     }
-                                }));
+                                }), Throwable::printStackTrace);
             }
 
             @Override
