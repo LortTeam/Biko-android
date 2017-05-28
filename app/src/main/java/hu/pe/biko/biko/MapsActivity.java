@@ -57,6 +57,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onRoutingFailure(RouteException e) {
                         Log.i("tag", "onRoutingFailure");
+                        e.printStackTrace();
                     }
 
                     @Override
