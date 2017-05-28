@@ -37,9 +37,7 @@ public class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.MyViewHold
                 .into(holder.image);
         holder.view.setOnClickListener(v -> {
             Intent intent = new Intent(holder.view.getContext(), RouteActivity.class);
-            intent.putExtra("name", holder.name.getText().toString());
-            intent.putExtra("description", holder.description.getText().toString());
-            // Image ???
+            intent.putExtra("route", route);
             holder.view.getContext().startActivity(intent);
         });
     }

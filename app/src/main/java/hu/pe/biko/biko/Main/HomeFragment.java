@@ -9,19 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import hu.pe.biko.biko.Biko;
 import hu.pe.biko.biko.R;
-import hu.pe.biko.biko.Route;
 import hu.pe.biko.biko.RoutesAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
 public class HomeFragment extends Fragment {
-
-    RecyclerView recyclerView;
-    ArrayList<Route> routesList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -32,7 +26,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
