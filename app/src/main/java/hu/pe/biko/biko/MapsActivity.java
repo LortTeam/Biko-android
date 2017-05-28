@@ -2,7 +2,6 @@ package hu.pe.biko.biko;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -92,22 +91,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_finish) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-            builder.setTitle("Congratulations! ")
-                    .setMessage("You've just finished this route")
-                    .setCancelable(false)
-                    .setNegativeButton("ОК", (dialog, which) -> {
-                        dialog.cancel();
-                        finish();
-
-                    })
-                    .setPositiveButton("Share", (dialog, which) -> {
-                        //Sharing
-                    });
-                            AlertDialog alert = builder.create();
-            alert.show();
-            return true;
+            Intent intent = new Intent(MapsActivity.this, CongratsActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
