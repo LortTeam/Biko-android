@@ -53,6 +53,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .key("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
                 .waypoints(latLngs)
                 .travelMode(AbstractRouting.TravelMode.BIKING)
+                .alternativeRoutes(true)
                 .withListener(new RoutingListener() {
                     @Override
                     public void onRoutingFailure(RouteException e) {
