@@ -1,9 +1,11 @@
 package hu.pe.biko.biko;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,9 +23,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import hu.pe.biko.biko.Main.MainActivity;
 import io.reactivex.Flowable;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -35,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -90,10 +93,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_finish) {
-            FinishedDialog fragment = new FinishedDialog();
-            fragment.show(getFragmentManager(), null);
 
-            finish();
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+            builder.setTitle("Congratulations! ")
+                    .setMessage("You've just finished this route")
+                    .setCancelable(false)
+                    .setNegativeButton("ОК", (dialog, which) -> {
+                        dialog.cancel();
+                        finish();
+
+                    })
+                    .setPositiveButton("Share", (dialog, which) -> {
+                        //Sharing
+                    });
+                            AlertDialog alert = builder.create();
+            alert.show();
             return true;
         }
         return super.onOptionsItemSelected(item);

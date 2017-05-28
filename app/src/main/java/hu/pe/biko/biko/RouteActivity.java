@@ -3,6 +3,7 @@ package hu.pe.biko.biko;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class RouteActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.text_route);
         textView.setText(route.getDescription());
         getSupportActionBar().setTitle(route.getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> {

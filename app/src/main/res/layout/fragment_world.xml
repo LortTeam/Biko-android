@@ -5,12 +5,18 @@
     tools:context="hu.pe.biko.biko.Main.WorldFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="32dp"
         android:text="This feature is still in development. Look for later updates!"
         android:gravity="center"
-        android:textSize="28sp"/>
+        android:textSize="28sp"/>-->
 
+
+    <fragment
+        android:id="@+id/fragment_map_world"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>
