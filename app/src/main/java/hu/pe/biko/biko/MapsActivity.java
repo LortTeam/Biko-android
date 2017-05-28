@@ -3,6 +3,7 @@ package hu.pe.biko.biko;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -42,29 +43,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         Intent intent = getIntent();
         hu.pe.biko.biko.Route route = intent.getParcelableExtra("route");
-        Flowable.fromIterable(route.getPlaces())
-                .map(place -> {
-                    LatLng latLng = new LatLng(place.getLat(), place.getLng());
-                    mMap.addMarker(new MarkerOptions().position(latLng)
-                            .title(place.getName()).snippet(place.getDescription()));
-                    return latLng;
-                }).toList().subscribe(latLngs -> new Routing.Builder()
+        Flowable.fromIterable(route.getPlaces()).map(place -> {
+            LatLng latLng = new LatLng(place.getLat(), place.getLng());
+            mMap.addMarker(new MarkerOptions().position(latLng)
+                    .title(place.getName()).snippet(place.getDescription()));
+            return latLng;
+        }).toList().subscribe(latLngs -> new Routing.Builder()
                 .key("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
                 .waypoints(latLngs)
                 .travelMode(AbstractRouting.TravelMode.BIKING)
                 .withListener(new RoutingListener() {
                     @Override
                     public void onRoutingFailure(RouteException e) {
-
+                        Log.i("tag", "onRoutingFailure");
                     }
 
                     @Override
                     public void onRoutingStart() {
-
+                        Log.i("tag", "onRoutingStart");
                     }
 
                     @Override
                     public void onRoutingSuccess(ArrayList<Route> routes, int i) {
+                        Log.i("tag", "onRoutingSuccess");
                         mMap.addPolyline(routes.get(0).getPolyOptions());
                         mMap.moveCamera(CameraUpdateFactory
                                 .newLatLngBounds(routes.get(0).getLatLgnBounds(), 10));
@@ -72,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onRoutingCancelled() {
-
+                        Log.i("tag", "onRoutingCancelled");
                     }
                 }).build().execute());
     }
