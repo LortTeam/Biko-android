@@ -18,6 +18,7 @@ import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -45,7 +46,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+// Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -70,15 +71,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.addMarker(new MarkerOptions().position(latLng)
                     .title(place.getName()).snippet(place.getDescription()));
             return latLng;
-        }).toList().subscribe(latLngs -> new Routing.Builder()
-                .key("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
-                .waypoints(latLngs)
-                .travelMode(AbstractRouting.TravelMode.BIKING)
-                .withListener(new RoutingListener() {
+        }).toList().subscribe(latLngs -> GoogleDirection.withServerKey("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
+                .from(latLngs.get(0))
+                .to(latLngs.get(latLngs.size() - 1))
+                .waypoints(latLngs.subList(1, latLngs.size() - 1))
+                .transportMode(TransportMode.WALKING)
+                .execute(new DirectionCallback() {
                     @Override
-                    public void onRoutingFailure(RouteException e) {
-                        Log.i("tag", "onRoutingFailure");
-                        e.printStackTrace();
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                        if (direction.isOK()) {
+                            com.akexorcist.googledirection.model.Route route = direction.getRouteList().get(0);
+                            mMap.addPolyline(new PolylineOptions().addAll(route.getOverviewPolyline().getPointList()));
+                            LatLngBounds bounds = new LatLngBounds(
+                                    route.getBound().getSouthwestCoordination().getCoordination(),
+                                    route.getBound().getNortheastCoordination().getCoordination());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+                        } else {
+                            Log.i("tag", direction.getStatus());
+                        }
                     }
 
                     @Override
@@ -133,14 +143,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    //TODO
+//TODO
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_finish) {
-            Intent intent = new Intent(MapsActivity.this, CongratsActivity.class);
-            startActivity(intent);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
