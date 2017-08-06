@@ -5,61 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+
     tools:context="hu.pe.biko.biko.CongratsActivity"
     android:background="@color/colorPrimary"
-    android:padding="16dp">
+    >
 
-    <TextView
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:text="Congratulations!"
-        android:textSize="36sp"
-        android:paddingBottom="24dp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:gravity="center"
-        tools:layout_editor_absoluteY="122dp"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="You've just finished this route. You had walked nearly 5 km fbd burnt near
-            600 calories \n\n Had you want to share your achievements with your friends?"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="195dp" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/caption" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="16dp">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <Button
-            android:background="@color/colorAccent"
-            android:textColor="#ffffff"
-            android:id="@+id/buttonOk"
-            android:layout_weight="1"
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="24dp"
+            android:text="Congratulations!"
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="122dp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="You've just finished this route. You had walked nearly 5 km fbd burnt near
+            600 calories \n\n Had you want to share your achievements with your friends?"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="195dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OK" />
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
 
-        <Button
-            android:id="@+id/buttonShare"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#ffffff"
-            android:background="@color/colorAccent"
-            android:text="Share" />
+            <Button
+                android:id="@+id/buttonOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:text="OK"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/buttonShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:text="Share"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
 
 </LinearLayout>
