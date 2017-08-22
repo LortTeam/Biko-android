@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,9 +26,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -67,7 +70,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Flowable.fromIterable(route.getPlaces()).map(place -> {
             LatLng latLng = new LatLng(place.getLat(), place.getLng());
             mMap.addMarker(new MarkerOptions().position(latLng)
-                    .title(place.getName()).snippet(place.getDescription()));
+                    .title(place.getName()).snippet(place.getDescription()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
             return latLng;
         }).toList().subscribe(latLngs -> GoogleDirection.withServerKey("AIzaSyAaqf2W1ZIxhDhE8GSz1urY2ntK7ERArc0")
                 .from(latLngs.get(0))
@@ -79,7 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onDirectionSuccess(Direction direction, String rawBody) {
                         if (direction.isOK()) {
                             com.akexorcist.googledirection.model.Route route = direction.getRouteList().get(0);
-                            mMap.addPolyline(new PolylineOptions().addAll(route.getOverviewPolyline().getPointList()));
+                            mMap.addPolyline(new PolylineOptions().color(Color.rgb(67, 133, 244)).addAll(route.getOverviewPolyline().getPointList()));
                             LatLngBounds bounds = new LatLngBounds(
                                     route.getBound().getSouthwestCoordination().getCoordination(),
                                     route.getBound().getNortheastCoordination().getCoordination());
@@ -103,10 +106,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(client, request, location -> {
+        mMap.setMyLocationEnabled(true);
+        /*LocationServices.FusedLocationApi.requestLocationUpdates(client, request, location -> {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addCircle(new CircleOptions().center(latLng).fillColor(Color.CYAN).radius(32.));
-        });
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Test"));
+        });*/
     }
 
     @Override
